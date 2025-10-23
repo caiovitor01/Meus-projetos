@@ -1,0 +1,73 @@
+import math
+
+funcoes = {
+    # Funções trigonométricas
+    "sin": math.sin, "cos": math.cos, "tan": math.tan,
+    "asin": math.asin, "acos": math.acos, "atan": math.atan,
+    "sinh": math.sinh, "cosh": math.cosh, "tanh": math.tanh,
+    "asinh": math.asinh, "acosh": math.acosh, "atanh": math.atanh,
+    "deg": math.degrees, "rad": math.radians,
+
+    # Logaritmos e exponenciais
+    "log": math.log, "log10": math.log10, "log2": math.log2,
+    "exp": math.exp, "pow": math.pow,
+
+    # Raízes e arredondamento
+    "sqrt": math.sqrt, "ceil": math.ceil, "floor": math.floor,
+    "trunc": math.trunc, "fabs": math.fabs,
+
+    # Fatoriais e combinatória
+    "factorial": math.factorial, "comb": math.comb, "perm": math.perm,
+
+    # Outras funções
+    "abs": abs, "round": round, "sum": sum, "max": max, "min": min,
+
+    # Constantes
+    "pi": math.pi, "e": math.e, "tau": math.tau, "inf": math.inf, "nan": math.nan
+}
+
+variaveis = {}
+historico = []
+
+def calculadora():
+    print("=== CALCULADORA CIENTÍFICA COMPLETA ===")
+    print("Digite expressões matemáticas. Exemplos:")
+    print("  sin(pi/2), log(100,10), sqrt(25), pow(2,8), factorial(5)")
+    print("Você pode criar variáveis: x = 5, y = sin(x)")
+    print("Comandos: 'historico', 'variaveis', 'limpar', 'sair'")
+
+    while True:
+        entrada = input("\n>>> ")
+
+        if entrada.lower() == "sair":
+            break
+        elif entrada.lower() == "historico":
+            for i, exp in enumerate(historico, 1):
+                print(f"{i}: {exp}")
+            continue
+        elif entrada.lower() == "variaveis":
+            for k, v in variaveis.items():
+                print(f"{k} = {v}")
+            continue
+        elif entrada.lower() == "limpar":
+            variaveis.clear()
+            historico.clear()
+            print("Variáveis e histórico limpos.")
+            continue
+
+        try:
+            if "=" in entrada:
+                nome, expr = entrada.split("=", 1)
+                nome = nome.strip()
+                valor = eval(expr, {"__builtins__": None}, {**funcoes, **variaveis})
+                variaveis[nome] = valor
+                print(f"{nome} = {valor}")
+                historico.append(f"{nome} = {expr} -> {valor}")
+            else:
+                resultado = eval(entrada, {"__builtins__": None}, {**funcoes, **variaveis})
+                print("Resultado:", resultado)
+                historico.append(f"{entrada} = {resultado}")
+        except Exception as e:
+            print("Erro:", e)
+
+calculadora()
